@@ -1,6 +1,10 @@
 .env
 .venv
 
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
 # Ignore contents of corpus folders while keeping the folders themselves
 corpus/zipped/*
 corpus/unzipped/*
