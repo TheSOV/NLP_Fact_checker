@@ -1,0 +1,7 @@
+.env
+.venv
+
+# Ignore contents of corpus folders while keeping the folders themselves
+corpus/zipped/*
+corpus/unzipped/*
+corpus/embeddings/*
