@@ -13,6 +13,8 @@ search_task = Task(
     Your task is to:
     1. Create a list of search terms based on the original request, claims, questions and phrases composed by keywords and phrases
     2. Find relevant articles that support or refute the claim
+
+    The user input to search is the following: '''{user_input}'''
     """,
     agent=searcher,
     expected_output="""The found fragments, with the textually repeated fragments eliminated and in an article format.""",

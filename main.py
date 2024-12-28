@@ -1,13 +1,10 @@
 import os
 from dotenv import load_dotenv
-from crews import translation_crew
-from crews.fact_checker_crew import fact_checker_crew
-from crews.translation_crew import translation_crew
-from crews.meta_search_crew import meta_search_crew
-from crews.json_extraction_crew import json_extraction_crew
-from tasks.metadata_search_task import meta_search_tool
 import time
 import re
+
+from flows.fact_checker_flow import FactCheckerFlow
+from flows.get_summarized_source_flow import GetSummarizedSourceFlow
 
 def sanitize_filename(filename):
     """Create a safe filename from the input string."""
@@ -23,16 +20,16 @@ def sanitize_filename(filename):
 # The proteolytic activity of pepsin is reduced by 50 percent through addition of bisabolol
 statements = [
     "América fue descubierta por el físico alemán Otto Hahn en 1919",
-    "La sal sube la presión arterial",
-    "La tierra es plana",
-    "Einstein fue un Químico Alemán, invertor de la ley de la gravedad",
-    "Newton fue el creador de la teoria de la relatividad",
-    "MArie Curie fue una Química Rusa que descubrió el radioactividad",	
-    "Bisabol increases proteolytic activity of pepsin",
-    "Bisabol decreases proteolytic activity of pepsin",
-    "Bisabol has no effect on the proteolytic activity of pepsin",
-    "Cinco hidrolasas de ésteres distintas han sido caracterizadas en la epidermis del conejillo de Indias",
-    "Las Cinco hidrolasas de ésteres distintas han sido caracterizadas en la epidermis del conejillo de Indias son potenciadoras de la proteolyticidad de la pepsina",
+    # "La sal sube la presión arterial",
+    # "La tierra es plana",
+    # "Einstein fue un Químico Alemán, invertor de la ley de la gravedad",
+    # "Newton fue el creador de la teoria de la relatividad",
+    # "MArie Curie fue una Química Rusa que descubrió el radioactividad",	
+    # "Bisabol increases proteolytic activity of pepsin",
+    # "Bisabol decreases proteolytic activity of pepsin",
+    # "Bisabol has no effect on the proteolytic activity of pepsin",
+    # "Cinco hidrolasas de ésteres distintas han sido caracterizadas en la epidermis del conejillo de Indias",
+    # "Las Cinco hidrolasas de ésteres distintas han sido caracterizadas en la epidermis del conejillo de Indias son potenciadoras de la proteolyticidad de la pepsina",
 ]
 
 
@@ -43,35 +40,57 @@ def main():
     for i, statement in enumerate(statements):
         print(f"Statement {i+1}: {statement}")
         print("\n")
-        fact_checker_crew.kickoff(inputs={"user_input": statement})
 
-        input_task_result = fact_checker_crew.tasks[0].output.json_dict
-        fact_checker_task_result = fact_checker_crew.tasks[2].output.json_dict
+        # flow = FactCheckerFlow(user_input=statement)
+        # result = flow.kickoff()
 
-        target_language = input_task_result["original_language"]
-        verification_facts = {
-            "fragments": fact_checker_task_result["fragments"],
-            "explanation": fact_checker_task_result["explanation"],
-            "classification": fact_checker_task_result["classification"]
-        }
+        # print("\nResult:")
+        # print(result)
+        # print("\n")
 
-        translation_crew.kickoff(inputs={
-            "fact_verifier_response": verification_facts,
-            "target_language": target_language
-        })
+        flow2 = GetSummarizedSourceFlow(source="Christopher Columbus", target_language="Spanish")
+        result = flow2.kickoff()
 
-        result = translation_crew.tasks[0].output.json_dict
+        print("\nResult:")
+        print(result)
+        print("\n")
+
+
+
+
+
+
+
+
+        # fact_checker_crew.kickoff(inputs={"user_input": statement})
+
+        # input_task_result = fact_checker_crew.tasks[0].output.json_dict
+        # fact_checker_task_result = fact_checker_crew.tasks[2].output.json_dict
+
+        # target_language = input_task_result["original_language"]
+        # verification_facts = {
+        #     "fragments": fact_checker_task_result["fragments"],
+        #     "explanation": fact_checker_task_result["explanation"],
+        #     "classification": fact_checker_task_result["classification"]
+        # }
+
+        # translation_crew.kickoff(inputs={
+        #     "fact_verifier_response": verification_facts,
+        #     "target_language": target_language
+        # })
+
+        # result = translation_crew.tasks[0].output.json_dict
         
-        sources = {}
+        # sources = {}
 
-        for source in fact_checker_task_result["sources"]: 
-            sources[source] = meta_search_tool.verify_title(meta_search_tool._normalize_text(source))   
+        # for source in fact_checker_task_result["sources"]: 
+        #     sources[source] = meta_search_tool.verify_title(meta_search_tool._normalize_text(source))   
 
-        result["sources"] = sources
+        # result["sources"] = sources
        
         
-        with open(f"verification_results_{i}.json", "w", encoding="utf-8") as f:
-            f.write(str(result))
+        # with open(f"verification_results_{i}.json", "w", encoding="utf-8") as f:
+        #     f.write(str(result))
 
         # # Create output directory if it doesn't exist
         # output_dir = "verification_results"

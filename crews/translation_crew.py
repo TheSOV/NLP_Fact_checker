@@ -1,10 +1,10 @@
 from crewai import Crew
 from agents.translator_agent import translator
-from tasks.translation_task import translate_fact_verrification_task
+from tasks.translation_task import translation_task_pure
 
 # Create translation crew
 translation_crew = Crew(
     agents=[translator],
-    tasks=[translate_fact_verrification_task],
+    tasks=[translation_task_pure],
     verbose=True  # To get detailed output of the crew's work
 )

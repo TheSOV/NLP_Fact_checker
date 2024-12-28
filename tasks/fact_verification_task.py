@@ -29,7 +29,9 @@ verification_task = Task(
     3. Make a determination based SOLELY on the provided information. Never use your own knowledge or assumptions.
     4. Provide a clear explanation for your verdict
 
-    Always think, explain and write to yourself the support or refute of the request_in_english and all the verification_facts and then give the answer before giving it to the user. All answers in English. You cannot use tools.""",
+    Always think, explain and write to yourself the support or refute of the request_in_english and all the verification_facts and then give the answer before giving it to the user. All answers in English. You cannot use tools.
+    
+    The user input to analyze is the following: '''{user_input}'''""",
     agent=verifier_agent,
     expected_output="""Provide a JSON file with the following fields:
     1. "sources" (Wikipedia articles): Provide all the Wikipedia articles (the sources must be selected from the search results, from the "wikipedia_article_source" field only, and must be textually cited, because will be used in future searches and must be accurate) from where you got useful information to support or refute the request_in_english and all the verification_facts. Each source must appear only once.
@@ -37,5 +39,5 @@ verification_task = Task(
     3. "explanation": based on the sources and fragments, provide a clear explanation for your verdict responding to all the aspects of the request_in_english. The explanation is for the user whoe made the initial request, so it will not understand terms like verification_facts or request_in_english, so just give the answer to the user in a natural way.
     4. "classification": A clear verdict (TRUE/FALSE/NOT ENOUGH INFORMATION) based on the if was possible to support or refute the all the parts of the claim. IMPORTANT: classification can be only TRUE if all the parts of the claim were verified, False if at least one part of the claim was refused and NOT ENOUGH INFORMATION if any of the parts of the claim is missing from the search results and cannot be supported or refuted.""",
     output_json=FactVerificationOutput,
-    context=[input_analysis_task, search_task],
+    context=[search_task],
 )

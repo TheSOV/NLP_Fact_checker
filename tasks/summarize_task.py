@@ -1,7 +1,5 @@
 from crewai import Task
 from agents.summarizer_agent import summarizer
-from pydantic import BaseModel
-from typing import List, Optional
 
 # Create summarize task
 summarize_task = Task(
