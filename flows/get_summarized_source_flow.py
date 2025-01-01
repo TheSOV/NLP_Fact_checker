@@ -8,7 +8,7 @@ class SummarizedSourceFlowState(BaseModel):
     source: str = ""
     target_language: str = ""
     summary: str = ""    
-    translated_summary: list = []
+    translated_summary: list = ""
     
 
 class GetSummarizedSourceFlow(Flow):
@@ -24,7 +24,7 @@ class GetSummarizedSourceFlow(Flow):
     def get_summarized_source(self):
         self._state.summary = meta_search_crew.kickoff(inputs={
             "article_title": self._state.source
-        })
+        }).raw
 
     
     @listen(get_summarized_source)
@@ -35,6 +35,6 @@ class GetSummarizedSourceFlow(Flow):
             self._state.translated_summary = generic_translation_crew.kickoff(inputs={
                 "content": self._state.summary,
                 "target_language": self._state.target_language
-            })
+            }).raw
 
-        return self._state.translated_summary
+        return self._state

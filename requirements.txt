@@ -3,6 +3,8 @@ crewai==0.86.0
 crewai-tools==0.17.0
 langchain-huggingface==0.1.2
 faiss-cpu==1.9.0.post1
+Flask==3.1.0
+Flask-RESTful==0.3.10
 
 
 

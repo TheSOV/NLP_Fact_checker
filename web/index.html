@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Fact Checker</title>
+  <!-- Quasar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/quasar@2.11.5/dist/quasar.css" rel="stylesheet">
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <q-layout view="hHh lpR fFf">
+      <q-header elevated class="bg-primary text-white">
+        <q-toolbar>            
+          <q-toolbar-title class="text-center">AI Fact Checker</q-toolbar-title>
+          <q-btn flat round dense icon="help" @click="drawerRight = !drawerRight">
+            <q-tooltip>Help</q-tooltip>
+          </q-btn>
+        </q-toolbar>
+      </q-header>
+
+      <q-drawer
+        side="right"
+        v-model="drawerRight"
+        bordered
+        :width="300"
+        :breakpoint="500"
+      >
+        <q-scroll-area class="fit">
+          <q-list padding>
+            <q-item-label header>How to use</q-item-label>
+            
+            <q-expansion-item
+              group="help"
+              icon="fact_check"
+              label="Fact Checking"
+              default-opened
+            >
+              <q-card>
+                <q-card-section>
+                  <p>Enter any statement and our AI will verify its accuracy using reliable sources.</p>
+                  <p>You'll receive:</p>
+                  <ul>
+                    <li>Classification (True/False/Uncertain)</li>
+                    <li>Detailed explanation</li>
+                    <li>Supporting evidence</li>
+                    <li>Source verification</li>
+                  </ul>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+
+            <q-expansion-item
+              group="help"
+              icon="source"
+              label="Source Summaries"
+            >
+              <q-card>
+                <q-card-section>
+                  <p>Click on any verified source to generate a summary:</p>
+                  <ul>
+                    <li>Select your preferred language</li>
+                    <li>Click "Generate" to get the summary</li>
+                    <li>View the translated summary in a popup</li>
+                  </ul>
+                  <p class="text-caption">Note: Only verified sources (green) can be summarized</p>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+
+            <q-expansion-item
+              group="help"
+              icon="translate"
+              label="Translation"
+            >
+              <q-card>
+                <q-card-section>
+                  <p>Translate explanations to your preferred language:</p>
+                  <ul>
+                    <li>Click the "Translate" button below any explanation</li>
+                    <li>Choose your target language</li>
+                    <li>View the translated text in a popup</li>
+                  </ul>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+
+            <q-expansion-item
+              group="help"
+              icon="tips_and_updates"
+              label="Tips"
+            >
+              <q-card>
+                <q-card-section>
+                  <p>For best results:</p>
+                  <ul>
+                    <li>Be specific in your statements</li>
+                    <li>Include dates and names when relevant</li>
+                    <li>Keep statements focused on a single claim</li>
+                    <li>Avoid complex or compound statements</li>
+                  </ul>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+          </q-list>
+        </q-scroll-area>
+      </q-drawer>
+
+      <q-page-container>
+        <q-page class="q-pa-none">
+          <chat-interface></chat-interface>
+        </q-page>
+      </q-page-container>
+    </q-layout>
+  </div>
+
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Quasar -->
+  <script src="https://cdn.jsdelivr.net/npm/quasar@2.11.5/dist/quasar.umd.js"></script>
+  <!-- App -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

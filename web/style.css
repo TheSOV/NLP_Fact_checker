@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  #app {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .messages-container {
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding-bottom: 60px;
+}
+
+.input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 1000;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.chat-message {
+  max-width: 80%;
+  margin: 0.5rem auto;
+}
+
+.chat-message.sent {
+  margin-left: 20%;
+}
+
+.chat-message.received {
+  margin-right: 20%;
+}
+
+.chat-message .q-message-text {
+  border-radius: 8px;
+}
+
+.chat-message .q-message-text--sent {
+  background: var(--q-primary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
