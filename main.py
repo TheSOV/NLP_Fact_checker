@@ -7,6 +7,8 @@ from flows.fact_checker_flow import FactCheckerFlow
 from flows.get_summarized_source_flow import GetSummarizedSourceFlow
 from crews.generic_translation_crew import generic_translation_crew
 from tools.search_manager import SearchManager
+import webbrowser
+import threading
 
 # Load environment variables
 load_dotenv()
@@ -127,5 +129,11 @@ if __name__ == '__main__':
     if not os.path.exists(WEB_DIR):
         raise FileNotFoundError(f"Web directory not found at: {WEB_DIR}")
     
+    
+    def open_browser():
+        webbrowser.open('http://localhost:5555')
+    
+    threading.Timer(10, open_browser).start()
+    
     print(f"Serving web files from: {WEB_DIR}")
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5555)

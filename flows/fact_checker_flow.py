@@ -12,6 +12,8 @@ class FactCheckerState(BaseModel):
     input_analyzer: dict[str, Any] = {}
     fact_checker: dict[str, Any] = {}
     translation: dict[str, Any] = {}
+    search_results: list[Any] = []
+    confidence_score: float = 0
 
 class FactCheckerFlow(Flow):
     def __init__(self, user_input: str):
@@ -30,6 +32,11 @@ class FactCheckerFlow(Flow):
         self._state.fact_checker = fact_checker_crew.kickoff(inputs={
             "user_input": json.dumps(self._state.input_analyzer),
         }).to_dict()
+
+        self._state.search_results = fact_checker_crew.tasks[0].output.raw # RAG's results
+        ## Here calculate confidence based on the fragments and save it to self._state.confidence_score.
+
+        ##
 
     @listen(check_facts)
     def translate_facts(self):
