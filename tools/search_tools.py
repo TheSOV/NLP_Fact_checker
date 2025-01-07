@@ -1,11 +1,8 @@
-from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_core.prompts import PromptTemplate
 from langchain_core.documents import Document
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field, PrivateAttr
-from typing import List, Type, Dict, Union
+from typing import List, Type, Dict
 from .search_manager import SearchManager
 
 import os
@@ -85,7 +82,7 @@ class RAGSearchTool(BaseTool):
 
 class MetadataSearchTool(BaseTool):
     name: str = "Metadata Search Tool"
-    description: str = "Search through documents using metadata and return relevant information."
+    description: str = "Search through documents using the article tittle and returns all its fragments."
     
     _vector_store: FAISS = PrivateAttr()
     result_as_answer: bool = False

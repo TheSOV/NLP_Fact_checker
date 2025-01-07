@@ -42,7 +42,18 @@
             >
               <q-card>
                 <q-card-section>
-                  <p>Enter any statement and our AI will verify its accuracy using reliable sources.</p>
+                  <p>Enter any statement and our AI will verify its accuracy using your preferred search method:</p>
+                  <div class="q-pl-md">
+                    <p><q-icon name="book" ></q-icon> <strong>Wikipedia Search</strong> (default):</p>
+                    <ul>
+                      <li>Searches over a local copy of Wikipedia, using RAG.</li>
+                    </ul>
+                    <p><q-icon name="public" ></q-icon> <strong>Internet Search</strong>:</p>
+                    <ul>
+                      <li>Searches across the Internet</li>
+                    </ul>
+                  </div>
+                  <p class="q-mt-md">Toggle between search modes using the icon next to the send button.</p>
                   <p>You'll receive:</p>
                   <ul>
                     <li>Classification (True/False/Uncertain)</li>
@@ -101,6 +112,8 @@
                     <li>Be specific in your statements</li>
                     <li>Include dates and names when relevant</li>
                     <li>Keep statements focused on a single claim</li>
+                    <li>Use Wikipedia search for historical facts</li>
+                    <li>Use Internet search for recent events</li>
                     <li>Avoid complex or compound statements</li>
                   </ul>
                 </q-card-section>

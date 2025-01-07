@@ -1,7 +1,5 @@
 from crewai import Task
 from agents.searcher_agent import searcher
-from pydantic import BaseModel
-from typing import List, Optional
 from tools.search_tools import RAGSearchTool
 
 search_tool = RAGSearchTool(result_as_answer=True)
