@@ -1,133 +1,147 @@
-# CrewAI NLP Project
+# AI Fact-Checking Application
 
-A structured project for building AI agent crews using the CrewAI framework, focused on Natural Language Processing tasks.
+A multilingual fact-checking system powered by CrewAI, designed to verify statements using NLP techniques.
 
-## Table of Contents
-- [Overview](#overview)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Project Components](#project-components)
-- [Contributing](#contributing)
-- [License](#license)
+## Key Features
 
-## Overview
-
-This project implements a CrewAI-based system for handling NLP tasks using multiple AI agents working together. The system is designed to be modular and extensible.
+- **Multilingual Support**: Fact-check and translate content across multiple languages
+- **Semantic Search**: Embedding-based search for relevant information
+- **Confidence Scoring**: Confidence calculation for fact verification
+- **Flexible Fact-Checking**: Supports both Wikipedia and internet-based fact-checking
 
 ## Project Structure
 
 ```
-NLP/
-├── .env                # Environment variables (OPENAI_API_KEY, OPENAI_MODEL_NAME)
-├── requirements.txt    # Project dependencies
-├── main.py            # Main entry point
-├── agents/            # Agent definitions
-│   ├── base_agent.py
-│   ├── researcher_agent.py
-│   └── ...            # Additional specialized agents
-├── corpus/            # Text data and corpus storage
-│   └── ...            # Data files and documents
-├── crews/             # Crew configurations
-│   └── research_crew.py
-├── tasks/             # Task definitions
-│   ├── base_task.py
-│   └── ...            # Specialized NLP tasks
-└── tools/             # Custom tools and utilities
-    └── base_tools.py
+NLP_Fact_checker/
+├── agents/           # AI agent definitions
+│   ├── fact_verifier_agent.py       # Handles core logic for fact validation
+│   ├── input_analyser_agent.py      # Processes and interprets input queries
+│   ├── internet_searcher_agent.py   # Performs web-based information retrieval
+│   ├── meta_searcher_agent.py       # Searches the articles contents based on the article name
+│   ├── searcher_agent.py            # General-purpose information search
+│   ├── summarizer_agent.py          # Generates concise content summaries
+│   └── translator_agent.py          # Handles multilingual translation
+│
+├── corpus/           # Embeddings and document storage
+│   ├── embeddings/   # Pre-computed vector embeddings
+│   └── documents/    # Source documents and reference materials
+│
+├── crews/            # Agent collaboration configurations
+│   ├── fact_checker_crew.py         # Coordinates Wikipedia-based fact verification
+│   ├── generic_translation_crew.py  # Handles generic text translation
+│   ├── input_analyzer_crew.py       # Processes and analyzes input queries
+│   ├── internet_fact_checker_crew.py # Coordinates internet-based fact-checking
+│   ├── meta_search_crew.py          # Manages metadata and source searching
+│   └── translation_crew.py          # Handles translations with structured output
+│
+├── flows/            # Workflow management
+│   ├── fact_checker_flow.py         # Wikipedia-based fact-checking workflow
+│   ├── internet_fact_checker_flow.py # Internet-based fact-checking workflow
+│   └── get_summarized_source_flow.py # Source content summarization
+│
+├── tasks/            # Specific task implementations
+│   ├── fact_verification_task.py    # Core fact-checking task
+│   ├── input_analysis_task.py       # Input query processing
+│   ├── internet_search_task.py      # Web-based information retrieval
+│   ├── metadata_search_task.py      # Metadata and source information search
+│   ├── search_task.py               # General search functionality
+│   ├── summarize_task.py            # Content summarization
+│   └── translation_task.py          # Language translation implementation
+│
+├── tools/            # Search and utility tools
+│   ├── search_manager.py            # Singleton vector store management
+│   └── search_tools.py              # RAG and metadata search capabilities
+│
+├── utils/            # Utility modules
+│   └── embeddings.py                # Singleton embeddings management
+│
+├── web/              # Web interface components
+│   ├── components/   # Reusable UI components
+│   ├── static/       # Static assets (CSS, images)
+│   └── templates/    # HTML templates
+│
+├── .env             # Environment configuration
+├── requirements.txt # Project dependencies
+└── main.py          # Application entry point
 ```
 
-### Directory Descriptions
+### Project Structure Breakdown
 
-- **agents/**: Contains AI agent implementations for different NLP tasks
-- **corpus/**: Stores text data, documents, and training materials
-- **crews/**: Defines agent collaboration patterns and task coordination
-- **tasks/**: Implements specific NLP task definitions and workflows
-- **tools/**: Houses utility functions and helper tools for agents
+#### 🏗️ Directory Purpose and Design
 
-## Prerequisites
+- **`agents/`**: Contains specialized AI agents responsible for specific tasks
+  - Each agent is designed with a single responsibility principle
+  - Modular design allows easy extension and modification
 
-- Python 3.10 or higher, less than 3.13
-- C++ 14 Build Tools and Compiler
-  - Note: If C++ is installed after Python, Python needs to be reinstalled
-- pip (Python package manager)
+- **`corpus/`**: Stores knowledge base and computational resources
+  - `embeddings/`: Pre-computed vector representations for fast semantic search
+  - `documents/`: Reference materials and source documents
 
-## Installation
-# Install C++ 14 first and then, python
+- **`crews/`**: Defines collaborative workflows for complex tasks
+  - Orchestrates multiple agents to achieve comprehensive goals
+  - Implements different fact-checking and translation strategies
 
-1. Clone the repository:
-   ```bash
-   git clone [repository-url]
-   cd NLP
-   ```
+- **`flows/`**: Manages end-to-end workflows
+  - Defines the sequence of operations for different fact-checking scenarios
+  - Handles state management and inter-agent communication
+  - Enables the integration of AI-driven and traditional programming approaches
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+- **`tasks/`**: Granular task implementations
+  - Breaks down complex operations into manageable, focused tasks
+  - Supports modular and reusable task design
 
-## Configuration
+- **`tools/`**: Provides utility functions and search capabilities
+  - Implements singleton patterns for resource management
+  - Offers advanced search and embedding techniques
 
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
+- **`utils/`**: Contains core utility modules
+  - Provides singleton embedding management
+  - Ensures consistent resource initialization
 
-2. Configure the following API keys in `.env`:
-   - OPENAI_API_KEY
-   - OPENAI_MODEL_NAME
+- **`web/`**: Web interface components
+  - Supports potential web-based frontend
+  - Separates UI concerns from core logic
 
+## Technical Details
 
-## Usage
+### Embedding and Search
+- Uses `all-MiniLM-L6-v2` multilingual embedding model
+- FAISS vector store for efficient semantic search
 
-Run the main application:
+### Confidence Scoring
+- Calculates semantic similarity between query and retrieved fragments
+- Uses cosine similarity to measure relevance
+- Confidence is the maximum similarity score between query and fragments
+- Ranges from 0.0 (no match) to 1.0 (perfect match)
+- Provides a simple, interpretable confidence metric
+
+### Multilingual Support
+- Automatic language detection
+- Translation of queries and results
+- Supports fact-checking in multiple languages
+
+## Quick Start
+
+### Prerequisites
+- On Windows the project requires Microsoft Visual C++ 14.0, from the C++ Build Tools. If the compiler is installed after Python, it is required to reinstall Python.
+- Python version 3.10 (recommended) or later, but before version 3.12
+
+### Installation
+```bash
+git clone https://github.com/TheSOV/NLP_Fact_checker.git
+cd NLP_Fact_checker
+pip install -r requirements.txt
+```
+
+### Running the Application
 ```bash
 python main.py
 ```
 
-## Project Components
-
-### Agents
-Located in `agents/`, our specialized AI agents include:
-
-- **Input Analyzer Agent**: Analyzes and processes input text to determine the nature of queries and required tasks
-- **Searcher Agent**: Performs information retrieval and search operations
-- **QA Agent**: Handles question-answering tasks using the processed information
-- **Fact Verifier Agent**: Validates facts and claims against reliable sources
-
-### Tasks
-Located in `tasks/`, our NLP tasks include:
-
-- **Input Analysis Task**: Initial processing and classification of input text
-- **Search Task**: Information retrieval from specified sources
-- **QA Review Task**: Question answering and response generation
-- **Fact Verification Task**: Fact-checking and validation procedures
-
-### Crews
-Located in `crews/`, our agent teams include:
-
-- **Fact Checker Crew**: Coordinates multiple agents for comprehensive fact verification
-  - Combines Input Analysis, Search, and Fact Verification capabilities
-  - Orchestrates the workflow between different agents
-  - Ensures thorough validation of information
-
-### Tools
-Located in `tools/`, containing utility functions and shared resources used by agents for:
-- Text processing
-- Data validation
-- Agent communication
-- Resource management
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
 ## License
+[MIT]
 
-MIT
+## References
+- [CrewAI Documentation](https://github.com/joaomdmoura/CrewAI)
+- [HuggingFace Embeddings](https://huggingface.co/models)
+- [FAISS Vector Search](https://github.com/facebookresearch/faiss)
