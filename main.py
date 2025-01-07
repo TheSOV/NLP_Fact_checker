@@ -5,6 +5,7 @@ import traceback
 from dotenv import load_dotenv
 from flows.fact_checker_flow import FactCheckerFlow
 from flows.get_summarized_source_flow import GetSummarizedSourceFlow
+from flows.internet_fact_checker_flow import InternetFactCheckerFlow
 from crews.generic_translation_crew import generic_translation_crew
 from tools.search_manager import SearchManager
 import webbrowser
@@ -46,6 +47,30 @@ class FactCheckerAPI(Resource):
             print(traceback.format_exc())  # Print full traceback
             return {'error': str(e), 'traceback': traceback.format_exc()}, 500
 
+class InternetFactCheckerAPI(Resource):
+    def post(self):
+        """API endpoint for internet fact checking"""
+        try:
+            data = request.get_json()
+            if not data or 'statement' not in data:
+                return {'error': 'Missing statement in request'}, 400
+
+            statement = data['statement']
+            print(f"Received statement for internet fact check: {statement}")  # Debug print
+            flow = InternetFactCheckerFlow(user_input=statement)
+            result = flow.kickoff()
+            
+            # Convert InternetFactCheckerState to dictionary
+            result_dict = result.translation if hasattr(result, 'translation') else {}
+            
+            print(f"Internet flow result: {result_dict}")  # Debug print
+            return jsonify(result_dict)
+
+        except Exception as e:
+            print(f"Error in InternetFactCheckerAPI: {e}")  # Debug print
+            print(traceback.format_exc())  # Print full traceback
+            return {'error': str(e), 'traceback': traceback.format_exc()}, 500
+
 class SummarizedSourceAPI(Resource):
     def post(self):
         """API endpoint for getting summarized source"""
@@ -79,6 +104,7 @@ class SummarizedSourceAPI(Resource):
 
 # Register API endpoints
 api.add_resource(FactCheckerAPI, '/api/fact-check')
+api.add_resource(InternetFactCheckerAPI, '/api/fact-check-internet')
 api.add_resource(SummarizedSourceAPI, '/api/summarize-source')
 
 @app.route('/')
@@ -118,12 +144,6 @@ def translate_text():
         print(traceback.format_exc())
         return {'error': str(e), 'traceback': traceback.format_exc()}, 500
 
-@app.after_request
-def add_header(response):
-    """Add headers to prevent caching during development"""
-    response.headers['Cache-Control'] = 'no-store'
-    return response
-
 if __name__ == '__main__':
     # Ensure the web directory exists
     if not os.path.exists(WEB_DIR):
@@ -133,7 +153,7 @@ if __name__ == '__main__':
     def open_browser():
         webbrowser.open('http://localhost:5555')
     
-    threading.Timer(10, open_browser).start()
+    threading.Timer(2, open_browser).start()
     
     print(f"Serving web files from: {WEB_DIR}")
     app.run(debug=False, port=5555)
