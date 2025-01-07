@@ -102,7 +102,81 @@ NLP_Fact_checker/
   - Supports potential web-based frontend
   - Separates UI concerns from core logic
 
-## Technical Details
+## Project Components Detailed
+
+### 🤖 Agents (`/agents`)
+Our specialized AI agents handle different aspects of fact-checking:
+- `fact_verifier_agent.py`: Validates and cross-references facts
+- `input_analyser_agent.py`: Processes and interprets input queries
+- `internet_searcher_agent.py`: Performs web-based information retrieval
+- `meta_searcher_agent.py`: Searches metadata and source information
+- `searcher_agent.py`: General-purpose information search
+- `summarizer_agent.py`: Generates concise summaries
+- `translator_agent.py`: Handles language translation
+
+### 🚢 Crews (`/crews`)
+Collaborative agent teams that coordinate complex tasks:
+- `fact_checker_crew.py`: Manages fact verification workflow
+- `generic_translation_crew.py`: Handles generic text translation
+- `input_analyzer_crew.py`: Processes and analyzes input queries
+- `internet_fact_checker_crew.py`: Coordinates internet-based fact-checking
+- `meta_search_crew.py`: Manages metadata and source searching
+- `translation_crew.py`: Specialized translation coordination
+
+### 📋 Tasks (`/tasks`)
+Specific task implementations for different workflow stages:
+- `fact_verification_task.py`: Core fact-checking logic
+- `input_analysis_task.py`: Input query processing
+- `internet_search_task.py`: Web-based information retrieval
+- `metadata_search_task.py`: Metadata and source information search
+- `search_task.py`: General search functionality
+- `summarize_task.py`: Content summarization
+- `translation_task.py`: Language translation implementation
+
+### 🔧 Tools (`/tools`)
+Utility functions and search management:
+- `search_manager.py`: Manages vector store and embedding resources
+- `search_tools.py`: Provides RAG and metadata search capabilities
+
+### 🔀 Flows (`/flows`)
+Workflow management for different fact-checking scenarios:
+- `fact_checker_flow.py`: Wikipedia-based fact-checking workflow
+- `get_summarized_source_flow.py`: Source content summarization
+- `internet_fact_checker_flow.py`: Internet-based fact-checking workflow
+
+## Environment Configuration
+
+### `.env` File Setup
+
+The `.env` file contains essential configuration for the application:
+
+```bash
+# OpenAI API Configuration
+OPENAI_API_KEY="your_openai_api_key"  # Required for AI-powered fact-checking
+OPENAI_MODEL_NAME="gpt-4o-mini"       # Specify the OpenAI model to use
+
+# Serper API Configuration (for web searches)
+SERPER_API_KEY="your_serper_api_key"                     # Optional: API key for web search functionality
+```
+
+### Configuration Details
+
+1. **OpenAI API Key**:
+   - Mandatory for using AI-powered fact-checking
+   - Obtain from [OpenAI Platform](https://platform.openai.com/account/api-keys)
+   - Ensure the key has appropriate permissions for text generation and analysis
+
+2. **OpenAI Model Selection**:
+   - Currently using `gpt-4o-mini`
+   - Provides a balance of performance and cost-effectiveness
+   - Can be changed to other compatible OpenAI models as needed
+
+3. **Serper API Key**:
+   - Used for web-based searches
+   - Can be obtained from [Serper.dev](https://serper.dev/) if web search is required
+
+
+## Technical Architecture
 
 ### Embedding and Search
 - Uses `all-MiniLM-L6-v2` multilingual embedding model
