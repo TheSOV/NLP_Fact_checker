@@ -1,9 +1,45 @@
 # AI Fact-Checking Application
 
+## 📋 Table of Contents
+
+### 🚀 Project Overview
+- [Key Features](#key-features)
+- [Project Structure](#project-structure)
+- [Project Components Detailed](#project-components-detailed)
+
+### 🛠 Technical Architecture
+- [Embedding and Search](#technical-architecture)
+- [Confidence Scoring](#confidence-scoring)
+- [Multilingual Support](#multilingual-support)
+
+### 📦 Corpus Management
+- [Understanding the Corpus](#corpus-management)
+- [Creating Your Own Corpus](#creating-your-own-corpus)
+- [Corpus Creation Steps](#3-corpus-creation-steps)
+
+### 🔧 Environment Setup
+- [Environment Configuration](#environment-configuration)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+
+### 💻 Usage and Examples
+- [Running the Application](#running-the-application)
+- [Example Usage](#example-usage)
+
+### 📜 Additional Information
+- [License](#license)
+- [References](#references)
+
+### 🤝 Contributing
+- [How to Contribute](#contributing)
+
+---
+
+## 🌟 Key Features
+
 A multilingual fact-checking system powered by CrewAI, designed to verify statements using NLP techniques.
 
-## Key Features
-
+### Features Highlights
 - **Multilingual Support**: Fact-check and translate content across multiple languages
 - **Semantic Search**: Embedding-based search for relevant information
 - **Confidence Scoring**: Confidence calculation for fact verification

@@ -6,7 +6,7 @@ summarizer = Agent(
     goal='Process and summarize search results into a coherent and well-structured article',
     backstory="""You are an expert at analyzing and summarizing research information.
     Your task is to take search results and transform them into a well-structured article,
-    eliminating redundant information and maintaining factual accuracy.""",
+    eliminating redundant information and maintaining factual accuracy. You don't use tools.""",
     verbose=True,
     allow_delegation=False,
 )

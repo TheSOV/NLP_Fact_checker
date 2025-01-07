@@ -84,42 +84,63 @@ class RAGSearchTool(BaseTool):
             "content": doc.page_content
         } for doc in docs]
 
+class MetadataSearchInput(BaseModel):
+    """Input schema for MetadataSearchTool."""
+    article_title: str = Field(..., description="The title of the Wikipedia article to search")
+
 class MetadataSearchTool(BaseTool):
+    """Search through documents using the article title and returns all its fragments."""
+    
     name: str = "Metadata Search Tool"
-    description: str = "Search through documents using the article tittle and returns all its fragments."
+    description: str = "Search through documents using the article title and returns all its fragments."
+    args_schema: Type[BaseModel] = MetadataSearchInput
     
     _vector_store: FAISS = PrivateAttr()
-    result_as_answer: bool = False
+    _title_index: set = PrivateAttr(default=set())
     
-    def __init__(self, result_as_answer: bool = False, **data):
+    def __init__(self, **data):
         """Initialize Metadata Search tool using SearchManager singleton."""
         super().__init__(**data)
+        
         search_manager = SearchManager()
         self._vector_store = search_manager.vector_store
-        self.result_as_answer = result_as_answer
+        
+        # Build title index during initialization
+        self._build_title_index()
+
+    def _build_title_index(self):
+        """Build an index of normalized titles from the vector store."""
+        for doc in self._vector_store.docstore._dict.values():
+            if 'title' in doc.metadata:
+                normalized_title = self._normalize_text(doc.metadata['title'])
+                self._title_index.add(normalized_title)
 
     def _run(self, article_title: str) -> str:
         """Run the metadata search tool."""
         try:
             # Normalize the article title for search
             normalized_title = self._normalize_text(article_title)
-            docs = self._vector_store.similarity_search(normalized_title, k=5)
             
-            # Format results
+            # Find all documents with matching normalized titles
             results = []
-            for doc in docs:
-                if self.result_as_answer:
-                    results.append(doc.page_content)
-                else:
-                    results.append({
-                        'content': doc.page_content,
-                        'metadata': doc.metadata
-                    })
+            for doc in self._vector_store.docstore._dict.values():
+                if 'title' in doc.metadata:
+                    doc_normalized_title = self._normalize_text(doc.metadata['title'])
+                    if doc_normalized_title == normalized_title:
+                        results.append(doc.page_content)
             
-            return results if not self.result_as_answer else "\n".join(results)
+            return "\n".join(results) if results else "No matching articles found."
             
         except Exception as e:
             return f"Error searching for article: {str(e)}"
+
+    def verify_title(self, title: str) -> bool:
+        """Verify if a title exists in the database."""
+        try:
+            normalized_title = self._normalize_text(title)
+            return normalized_title in self._title_index
+        except:
+            return False
 
     def _normalize_text(self, text: str) -> str:
         """Normalize text for search."""
@@ -133,11 +154,3 @@ class MetadataSearchTool(BaseTool):
         text = ' '.join(text.split())
         
         return text
-
-    def verify_title(self, title: str) -> bool:
-        """Verify if a title exists in the database."""
-        try:
-            docs = self._vector_store.similarity_search(self._normalize_text(title), k=1)
-            return bool(docs)
-        except:
-            return False
