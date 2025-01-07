@@ -8,11 +8,15 @@ from flows.get_summarized_source_flow import GetSummarizedSourceFlow
 from flows.internet_fact_checker_flow import InternetFactCheckerFlow
 from crews.generic_translation_crew import generic_translation_crew
 from tools.search_manager import SearchManager
+from utils.embeddings import embeddings
 import webbrowser
 import threading
 
 # Load environment variables
 load_dotenv()
+
+# Initialize embeddings at startup
+embeddings
 
 app = Flask(__name__)
 api = Api(app)
@@ -38,6 +42,7 @@ class FactCheckerAPI(Resource):
             
             # Convert FactCheckerState to dictionary
             result_dict = result.translation if hasattr(result, 'translation') else {}
+            result_dict['confidence_score'] = result.confidence_score if hasattr(result, 'confidence_score') else None
             
             print(f"Flow result: {result_dict}")  # Debug print
             return jsonify(result_dict)
@@ -62,6 +67,7 @@ class InternetFactCheckerAPI(Resource):
             
             # Convert InternetFactCheckerState to dictionary
             result_dict = result.translation if hasattr(result, 'translation') else {}
+            result_dict['confidence_score'] = result.confidence_score if hasattr(result, 'confidence_score') else None
             
             print(f"Internet flow result: {result_dict}")  # Debug print
             return jsonify(result_dict)

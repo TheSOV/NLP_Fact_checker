@@ -2,7 +2,8 @@ from crewai import Task
 from agents.internet_searcher_agent import internet_searcher
 from crewai_tools import SerperDevTool, ScrapeWebsiteTool
 
-
+#SerperDevTool is a CrewAI´s builtin tool that allows to use Serper´s API to make searches over internet using Google
+#ScrapeWebsiteTool is a CrewAI´s builtin tool based on python-request library thats implements basic web scraping
 
 # Create search task
 internet_search_task = Task(

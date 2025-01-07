@@ -1,3 +1,7 @@
+# Search Tools Module: Advanced Search Capabilities for Fact-Checking
+# Provides specialized tools for semantic search and metadata retrieval
+# Supports multilingual, context-aware information extraction
+
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from crewai.tools import BaseTool

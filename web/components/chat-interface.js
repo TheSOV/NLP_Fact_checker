@@ -22,14 +22,28 @@ const ChatInterface = {
                 <q-card flat bordered class="q-mt-sm q-mb-md">
                   <!-- Classification Chip -->
                   <q-card-section>
-                    <div class="row items-center q-gutter-sm">
-                      <q-chip 
-                        :color="getVerificationColor(message.verification.classification)"
-                        text-color="white"
-                        icon="fact_check"
-                      >
-                        {{ message.verification.classification }}
-                      </q-chip>
+                    <div class="row items-center justify-between q-gutter-sm">
+                      <div class="row items-center q-gutter-sm">
+                        <q-chip 
+                          :color="getVerificationColor(message.verification.classification)"
+                          text-color="white"
+                          icon="fact_check"
+                        >
+                          {{ message.verification.classification }}
+                        </q-chip>
+                      </div>
+                      <div v-if="message.verification.confidence_score !== undefined">
+                        <q-chip
+                          :color="getConfidenceColor(message.verification.confidence_score)"
+                          text-color="white"
+                          icon="analytics"
+                        >
+                          Confidence: {{ (message.verification.confidence_score * 100).toFixed(1) }}%
+                          <q-tooltip>
+                            Confidence score based on semantic similarity
+                          </q-tooltip>
+                        </q-chip>
+                      </div>
                     </div>
                   </q-card-section>
 
@@ -461,6 +475,12 @@ const ChatInterface = {
         'NOT ENOUGH INFORMATION': 'grey'
       };
       return colors[classification.toUpperCase()] || 'grey';
+    },
+    getConfidenceColor(score) {
+      if (score >= 0.8) return 'positive';
+      if (score >= 0.6) return 'info';
+      if (score >= 0.4) return 'warning';
+      return 'negative';
     },
     openUrl(url) {
       window.open(url, '_blank', 'noopener');

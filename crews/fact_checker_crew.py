@@ -9,6 +9,5 @@ fact_checker_crew = Crew(
     agents=[searcher, verifier_agent],
     tasks=[search_task, verification_task],
     verbose=True,  # To get detailed output of the crew's work
-    planning=True,
 )
 
