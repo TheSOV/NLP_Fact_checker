@@ -1,7 +1,5 @@
 from crewai import Task
 from agents.meta_searcher_agent import meta_searcher
-from pydantic import BaseModel
-from typing import List, Optional
 from tools.search_tools import MetadataSearchTool
 
 meta_search_tool = MetadataSearchTool(result_as_answer=True)

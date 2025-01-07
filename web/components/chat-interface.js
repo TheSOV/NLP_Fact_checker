@@ -78,30 +78,30 @@ const ChatInterface = {
                   <q-card-section v-if="message.verification.sources">
                     <div class="text-subtitle2">Sources:</div>
                     <div class="q-gutter-sm">
-                      <div v-for="(isVerified, source) in message.verification.sources" :key="source" class="inline-block">
+                      <div v-for="(sourceInfo, sourceKey) in message.verification.sources" :key="sourceKey" class="inline-block">
                         <q-chip 
-                          :color="isVerified ? 'positive' : 'warning'"
-                          :text-color="isVerified ? 'white' : 'black'"
-                          :icon="isVerified ? 'source' : 'error'"
-                          :disable="!isVerified"
-                          @click="showLanguageMenu(source, isVerified, $event)"
+                          :color="sourceInfo.verified ? 'positive' : 'warning'"
+                          :text-color="sourceInfo.verified ? 'white' : 'black'"
+                          :icon="sourceInfo.internet ? 'public' : 'source'"
+                          :disable="!sourceInfo.verified && !sourceInfo.internet"
+                          @click="!sourceInfo.internet && sourceInfo.verified ? showLanguageMenu(sourceInfo.name, sourceInfo.verified, $event) : null"
                         >
-                          {{ source }}
+                          {{ sourceInfo.name }}
                           <q-tooltip>
-                            {{ isVerified ? 'Click to generate summary' : 'Unverified Source' }}
+                            {{ sourceInfo.internet ? 'Internet Source' : (sourceInfo.verified ? 'Click to generate summary' : 'Unverified Source') }}
                           </q-tooltip>
                         </q-chip>
 
-                        <q-menu v-model="sourceMenus[source]" :target="menuTargets[source]">
+                        <q-menu v-if="!sourceInfo.internet" v-model="sourceMenus[sourceInfo.name]" :target="menuTargets[sourceInfo.name]">
                           <q-card style="min-width: 250px">
                             <q-card-section>
                               <div class="text-h6">Generate Summary</div>
-                              <div class="text-caption">Select language for {{ source }}</div>
+                              <div class="text-caption">Select language for {{ sourceInfo.name }}</div>
                             </q-card-section>
 
                             <q-card-section class="q-pt-none">
                               <q-select
-                                v-model="selectedLanguages[source]"
+                                v-model="selectedLanguages[sourceInfo.name]"
                                 :options="languageOptions"
                                 label="Language"
                                 outlined
@@ -120,9 +120,9 @@ const ChatInterface = {
                                 flat 
                                 label="Generate" 
                                 color="primary"
-                                @click="generateSummary(source)"
-                                :loading="summaryLoading[source]"
-                                :disable="!selectedLanguages[source]"
+                                @click="generateSummary(sourceInfo.name)"
+                                :loading="summaryLoading[sourceInfo.name]"
+                                :disable="!selectedLanguages[sourceInfo.name]"
                               />
                             </q-card-actions>
                           </q-card>
@@ -130,6 +130,7 @@ const ChatInterface = {
                       </div>
                     </div>
                   </q-card-section>
+
                 </q-card>
               </template>
 
@@ -232,14 +233,30 @@ const ChatInterface = {
             @keyup.enter="sendMessage"
           >
             <template v-slot:append>
-              <q-btn
-                round
-                dense
-                flat
-                icon="send"
-                :loading="loading"
-                @click="sendMessage"
-              />
+              <div class="row items-center q-gutter-sm">
+                <q-btn-group flat>
+                  <q-btn
+                    round
+                    dense
+                    flat
+                    :icon="useInternet ? 'public' : 'book'"
+                    :color="useInternet ? 'primary' : 'secondary'"
+                    @click="toggleSearchMode"
+                  >
+                    <q-tooltip>
+                      {{ useInternet ? 'Using Internet Search' : 'Using Wikipedia Search' }}
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    round
+                    dense
+                    flat
+                    icon="send"
+                    :loading="loading"
+                    @click="sendMessage"
+                  />
+                </q-btn-group>
+              </div>
             </template>
           </q-input>
         </div>
@@ -269,6 +286,7 @@ const ChatInterface = {
         loading: false,
         textToTranslate: ''
       },
+      useInternet: false,
       languageOptions: [
         'English',
         'Spanish',
@@ -300,7 +318,8 @@ const ChatInterface = {
 
       this.loading = true;
       try {
-        const response = await fetch('/api/fact-check', {
+        const endpoint = this.useInternet ? '/api/fact-check-internet' : '/api/fact-check';
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ statement: messageText })
@@ -431,6 +450,9 @@ const ChatInterface = {
         this.sendMessage();
       }
     },
+    toggleSearchMode() {
+      this.useInternet = !this.useInternet;
+    },
     getVerificationColor(classification) {
       const colors = {
         'TRUE': 'positive',
@@ -439,6 +461,9 @@ const ChatInterface = {
         'NOT ENOUGH INFORMATION': 'grey'
       };
       return colors[classification.toUpperCase()] || 'grey';
+    },
+    openUrl(url) {
+      window.open(url, '_blank', 'noopener');
     }
   }
 };

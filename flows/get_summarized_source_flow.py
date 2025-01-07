@@ -1,3 +1,4 @@
+from crewai import task
 from crewai.flow.flow import Flow, listen, start
 from pydantic import BaseModel
 
@@ -25,6 +26,8 @@ class GetSummarizedSourceFlow(Flow):
         self._state.summary = meta_search_crew.kickoff(inputs={
             "article_title": self._state.source
         }).raw
+
+        print(meta_search_crew.tasks[0].output.raw)
 
     
     @listen(get_summarized_source)
