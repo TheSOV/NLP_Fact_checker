@@ -176,7 +176,7 @@ The corpus currently supports Wikipedia XML dumps as source documents. You can d
 
 The corpus must meet the following requirements:
 
-- The corpus must be a Wikipedia XML dump (files that contain article text, like this one [enwiki-20241001-pages-articles1.xml-p1p41242.bz2](https://mirror.accum.se/mirror/wikimedia.org/dumps/enwiki/20241001/enwiki-20241001-pages-articles1.xml-p1p41242.bz2))
+- The corpus must be a Wikipedia XML dump (files that contains article text, like this one [enwiki-20241001-pages-articles1.xml-p1p41242.bz2](https://mirror.accum.se/mirror/wikimedia.org/dumps/enwiki/20241001/enwiki-20241001-pages-articles1.xml-p1p41242.bz2))
 - Currently, only English language sources are supported to be used as corpus
 
 #### 3. Corpus Creation Steps
