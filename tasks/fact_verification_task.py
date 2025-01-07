@@ -27,7 +27,7 @@ verification_task = Task(
     1. Review the search results, the original request and the verification_facts. Pay special attention to all the elemnts of the request_in_english, to ensure if information exists about them.
     2. Evaluate the evidence for and against the request_in_english and all the verification_facts generated from it. Check all the elements of the request_in_english, to ensure if information exists about them.
     3. Make a determination based SOLELY on the provided information. Never use your own knowledge or assumptions.
-    4. Provide a clear explanation for your verdict
+    4. Provide a clear explanation for your veredict
 
     Always think, explain and write to yourself the support or refute of the request_in_english and all the verification_facts and then give the answer before giving it to the user. All answers in English. You cannot use tools.
     
