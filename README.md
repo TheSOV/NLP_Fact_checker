@@ -144,6 +144,57 @@ Workflow management for different fact-checking scenarios:
 - `get_summarized_source_flow.py`: Source content summarization
 - `internet_fact_checker_flow.py`: Internet-based fact-checking workflow
 
+## Corpus Management
+
+### Understanding the Corpus
+
+The `corpus/` directory is a critical component of the fact-checking system, responsible for managing knowledge sources and embeddings:
+
+```
+corpus/
+├── zipped/           # Original compressed source files
+├── unzipped/         # Extracted source documents
+├── embeddings/       # Generated vector embeddings
+├── create_embeddings.py  # Script to process and vectorize documents
+└── unzip_files.py    # Utility to extract compressed files
+```
+
+### Creating Your Own Corpus
+
+#### Preparing Your Corpus
+
+The corpus is a critical component of the fact-checking system and is responsible for providing knowledge sources and embeddings. To create your own corpus, follow these steps:
+
+##### 1. Gather Source Documents
+
+The corpus currently supports Wikipedia XML dumps as source documents. You can download the XML dumps from the following sources:
+
+- [Wikipedia XML Dumps](https://dumps.wikimedia.org/)
+- [Recommended Mirror](https://mirror.accum.se/mirror/wikimedia.org/dumps/enwiki/20241001/)
+
+##### 2. Document Requirements
+
+The corpus must meet the following requirements:
+
+- The corpus must be a Wikipedia XML dump (files that contain article text, like this one [enwiki-20241001-pages-articles1.xml-p1p41242.bz2](https://mirror.accum.se/mirror/wikimedia.org/dumps/enwiki/20241001/enwiki-20241001-pages-articles1.xml-p1p41242.bz2))
+- Currently, only English language sources are supported to be used as corpus
+
+#### 3. Corpus Creation Steps
+
+##### Automatic Corpus Generation
+```bash
+# Place bz2 files containing the XML in corpus/zipped/. It accepts any number of files.
+python corpus/unzip_files.py     # Extract compressed files
+python corpus/create_embeddings.py  # Generate embeddings
+```
+
+#### Embedding Generation Process
+1. Extract text from source documents
+2. Clean and normalize text
+3. Split into manageable chunks
+4. Generate vector embeddings
+5. Store in FAISS vector database
+
 ## Environment Configuration
 
 ### `.env` File Setup
