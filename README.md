@@ -1,7 +1,7 @@
 # AI Fact-Checking Application
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/TheSOV/NLP_Fact_checker)
 
-Detailed information at [[DeepWiki](https://deepwiki.com/TheSOV/NLP_Fact_checker)
+Detailed information at [DeepWiki](https://deepwiki.com/TheSOV/NLP_Fact_checker)
 
 ## 📋 Table of Contents
 
